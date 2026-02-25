@@ -38,19 +38,29 @@ void Game::check_horizontally_static_collisions() noexcept {
 }
 
 void Game::check_mario_collision() {
-	for (int i = 0; i < collisionable_objs.size(); i++) {
+	if (!mario) {
+		return;
+	}
+
+	for (size_t i = 0; i < collisionable_objs.size();) {
 		Collisionable* obj = collisionable_objs[i];
+		if (obj == mario) {
+			i++;
+			continue;
+		}
+
 		if (obj->has_collision(mario)) {
 			obj->process_mario_collision(mario);
 			if (!mario->is_active()) {
 				break;
 			} else if (!obj->is_active()) {
-				// TODO
 				collisionable_objs[i] = collisionable_objs.back();
 				collisionable_objs.pop_back();
-				i--;
+				continue;
 			}
 		}
+
+		i++;
 	}
 }
 
@@ -64,7 +74,11 @@ bool Game::check_static_collisions(Collisionable* obj) const noexcept {
 }
 
 void Game::check_vertically_static_collisions() noexcept {
-	if (mario->has_collision(static_objs[static_objs.size() - 1])) {
+	if (!mario || static_objs.empty()) {
+		return;
+	}
+
+	if (mario->has_collision(static_objs.back())) {
 		is_level_end_ = true;
 	}
 	

@@ -39,27 +39,26 @@ int main() {
 	do {
 		// 2. Получение пользовательского ввода	
 		user_input = biv::os::get_user_input();
-		switch (user_input) {
-			case biv::os::UserInput::MAP_LEFT:
-				mario->move_map_left();
-				if (!game.check_static_collisions(mario)) {
-					game.move_map_left();
-				}
-				mario->move_map_right();
-				break;
-			case biv::os::UserInput::MAP_RIGHT:
-				mario->move_map_right();
-				if (!game.check_static_collisions(mario)) {
-					game.move_map_right();
-				}
-				mario->move_map_left();
-				break;
-			case biv::os::UserInput::MARIO_JUMP:
-				mario->jump();
-				break;
-			case biv::os::UserInput::EXIT:
-				game.finish();
-				break;
+		bool map_left = biv::os::has_input(user_input, biv::os::UserInput::MAP_LEFT);
+		bool map_right = biv::os::has_input(user_input, biv::os::UserInput::MAP_RIGHT);
+		if (map_left && !map_right) {
+			mario->move_map_left();
+			if (!game.check_static_collisions(mario)) {
+				game.move_map_left();
+			}
+			mario->move_map_right();
+		} else if (map_right && !map_left) {
+			mario->move_map_right();
+			if (!game.check_static_collisions(mario)) {
+				game.move_map_right();
+			}
+			mario->move_map_left();
+		}
+		if (biv::os::has_input(user_input, biv::os::UserInput::MARIO_JUMP)) {
+			mario->jump();
+		}
+		if (biv::os::has_input(user_input, biv::os::UserInput::EXIT)) {
+			game.finish();
 		}
 		
 		// 3. Обновление внутреннего состояния игры
