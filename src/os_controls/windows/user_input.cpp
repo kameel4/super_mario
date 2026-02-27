@@ -17,19 +17,19 @@ bool biv::os::has_input(UserInput value, UserInput flag) noexcept {
 UserInput biv::os::get_user_input() {
 	UserInput input = UserInput::NO_INPUT;
 
-	if (GetKeyState('A') < 0) {
+	if (GetAsyncKeyState('A') < 0) {
 		input = input | UserInput::MAP_RIGHT;
 	}
 
-	if (GetKeyState('D') < 0) {
+	if (GetAsyncKeyState('D') < 0) {
 		input = input | UserInput::MAP_LEFT;
 	}
 
-	if (GetKeyState(VK_SPACE) < 0) {
+	if (GetAsyncKeyState(VK_SPACE) < 0) {
 		input = input | UserInput::MARIO_JUMP;
 	}
 
-	if (GetKeyState(VK_ESCAPE) < 0) {
+	if (GetAsyncKeyState(VK_ESCAPE) < 0) {
 		input = input | UserInput::EXIT;
 	}
 
